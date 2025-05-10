@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Chrome, Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed } from "lucide-react";
 import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from "@/components/ui/use-toast";
 
@@ -107,23 +107,6 @@ const RegisterForm: React.FC = () => {
         >
           {loading ? "Creating account..." : "Create account"}
         </Button>
-
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">Or continue with</span>
-          </div>
-        </div>
-        
-        <button 
-          type="button" 
-          className="google-button"
-        >
-          <Chrome size={20} />
-          <span>Continue with Google</span>
-        </button>
         
         <div className="text-center pt-4">
           <span className="text-sm text-muted-foreground">
