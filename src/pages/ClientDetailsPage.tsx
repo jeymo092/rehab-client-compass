@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -15,12 +14,18 @@ const sampleClient = {
   street: 'Moi Avenue',
   gender: 'Male',
   dateOfBirth: '2005-06-12',
+  admissionDate: '2023-01-15',
   parentName: 'Jane Doe',
   parentContact: '+254 712 345 678',
   parentLocation: 'Nairobi, Kenya',
   relationship: 'Mother',
   registrationDate: '2023-01-15',
-  status: 'active' as const,
+  status: 'discharged' as const,
+  reintegrationProgram: 'Technical Training Program',
+  reintegrationLocation: 'Nairobi Technical Institute',
+  contactPersonnel: 'David Mwangi',
+  contactDetails: '+254 722 123 456',
+  reintegrationNotes: 'Enrolled in a 6-month carpentry course. Shows good progress and interest in woodworking.',
 };
 
 // Sample academic records
@@ -95,6 +100,7 @@ const ClientDetailsPage: React.FC = () => {
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="academic">Academic Records</TabsTrigger>
             <TabsTrigger value="home-visits">Home Visits</TabsTrigger>
+            <TabsTrigger value="reintegration">Reintegration</TabsTrigger>
             <TabsTrigger value="reports">Reports</TabsTrigger>
           </TabsList>
 
@@ -117,6 +123,10 @@ const ClientDetailsPage: React.FC = () => {
                     <div className="flex justify-between">
                       <dt className="font-medium text-gray-500">Date of Birth:</dt>
                       <dd>{client.dateOfBirth}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="font-medium text-gray-500">Admission Date:</dt>
+                      <dd>{client.admissionDate}</dd>
                     </div>
                     <div className="flex justify-between">
                       <dt className="font-medium text-gray-500">Registration Date:</dt>
@@ -231,6 +241,65 @@ const ClientDetailsPage: React.FC = () => {
                     </div>
                   ))}
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="reintegration">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Reintegration Program</CardTitle>
+                {client.status === 'discharged' && (
+                  <Button size="sm">Edit Program Details</Button>
+                )}
+              </CardHeader>
+              <CardContent>
+                {client.status === 'discharged' && client.reintegrationProgram ? (
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500">Program Name</h3>
+                        <p className="mt-1">{client.reintegrationProgram}</p>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500">Location</h3>
+                        <p className="mt-1">{client.reintegrationLocation}</p>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500">Contact Person/Trainer</h3>
+                        <p className="mt-1">{client.contactPersonnel}</p>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500">Contact Details</h3>
+                        <p className="mt-1">{client.contactDetails}</p>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500">Notes</h3>
+                      <p className="mt-1">{client.reintegrationNotes}</p>
+                    </div>
+                    
+                    <div className="mt-6 pt-6 border-t">
+                      <h3 className="text-lg font-medium mb-3">Progress Tracking</h3>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">No progress records yet</span>
+                        <Button size="sm" variant="outline">Add Progress Report</Button>
+                      </div>
+                    </div>
+                  </div>
+                ) : client.status === 'discharged' ? (
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
+                    <p className="text-muted-foreground mb-4">No reintegration program has been assigned yet.</p>
+                    <Button>Add Reintegration Program</Button>
+                  </div>
+                ) : (
+                  <div className="py-8 text-center">
+                    <p className="text-muted-foreground">
+                      Reintegration program details will be available once the client completes rehabilitation.
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

@@ -13,6 +13,16 @@ import {
 } from "@/components/ui/select";
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/components/ui/use-toast";
+import { Textarea } from "@/components/ui/textarea";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const RegisterClientPage: React.FC = () => {
   const navigate = useNavigate();
@@ -27,17 +37,30 @@ const RegisterClientPage: React.FC = () => {
     parentContact: '',
     parentLocation: '',
     relationship: '',
+    admissionDate: format(new Date(), 'yyyy-MM-dd'),
+    reintegrationProgram: '',
+    reintegrationLocation: '',
+    contactPersonnel: '',
+    contactDetails: '',
+    reintegrationNotes: '',
   });
 
   const [loading, setLoading] = useState(false);
+  const [showReintegration, setShowReintegration] = useState(false);
   
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
   
   const handleSelectChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleDateChange = (field: string, date: Date | undefined) => {
+    if (date) {
+      setFormData((prev) => ({ ...prev, [field]: format(date, 'yyyy-MM-dd') }));
+    }
   };
   
   const generateAdmissionNumber = () => {
@@ -131,6 +154,32 @@ const RegisterClientPage: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="admissionDate">Admission Date</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !formData.admissionDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {formData.admissionDate ? format(new Date(formData.admissionDate), "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={formData.admissionDate ? new Date(formData.admissionDate) : undefined}
+                          onSelect={(date) => handleDateChange('admissionDate', date)}
+                          initialFocus
+                          className={cn("p-3 pointer-events-auto")}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="originalHome">Original Home</Label>
                     <Input
                       id="originalHome"
@@ -210,6 +259,75 @@ const RegisterClientPage: React.FC = () => {
                     />
                   </div>
                 </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-medium">Reintegration Program</h3>
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    onClick={() => setShowReintegration(!showReintegration)}
+                  >
+                    {showReintegration ? "Hide" : "Show"} Details
+                  </Button>
+                </div>
+                
+                {showReintegration && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-4 rounded-md">
+                    <div className="space-y-2">
+                      <Label htmlFor="reintegrationProgram">Program Name</Label>
+                      <Input
+                        id="reintegrationProgram"
+                        name="reintegrationProgram"
+                        value={formData.reintegrationProgram}
+                        onChange={handleChange}
+                        placeholder="Enter program name"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="reintegrationLocation">Location</Label>
+                      <Input
+                        id="reintegrationLocation"
+                        name="reintegrationLocation"
+                        value={formData.reintegrationLocation}
+                        onChange={handleChange}
+                        placeholder="Enter institution location"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="contactPersonnel">Contact Person/Trainer</Label>
+                      <Input
+                        id="contactPersonnel"
+                        name="contactPersonnel"
+                        value={formData.contactPersonnel}
+                        onChange={handleChange}
+                        placeholder="Enter contact person or trainer name"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="contactDetails">Contact Details</Label>
+                      <Input
+                        id="contactDetails"
+                        name="contactDetails"
+                        value={formData.contactDetails}
+                        onChange={handleChange}
+                        placeholder="Enter phone or email"
+                      />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <Label htmlFor="reintegrationNotes">Additional Notes</Label>
+                      <Textarea
+                        id="reintegrationNotes"
+                        name="reintegrationNotes"
+                        value={formData.reintegrationNotes}
+                        onChange={handleChange}
+                        placeholder="Enter any additional notes about the reintegration program"
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
               
               <div className="flex justify-end space-x-4 pt-4">
