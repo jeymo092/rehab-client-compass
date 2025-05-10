@@ -10,9 +10,9 @@ const LoginPage: React.FC = () => {
         <div className="max-w-md px-4 sm:px-6 lg:px-8 text-center">
           <AuthHeader />
           <div className="mt-24 space-y-6">
-            <h1 className="text-5xl font-bold">Login page</h1>
+            <h1 className="text-5xl font-bold">Admin Login</h1>
             <p className="text-xl opacity-80">
-              Start your journey<br />now with us
+              Secure access to<br />Mwangaza Rehabilitation Center
             </p>
           </div>
         </div>

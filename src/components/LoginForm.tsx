@@ -94,16 +94,12 @@ const LoginForm: React.FC = () => {
         >
           {loading ? "Logging in..." : "Login now"}
         </Button>
-        
-        <div className="text-center pt-4">
-          <span className="text-sm text-muted-foreground">
-            Don't have an account? 
-          </span>{" "}
-          <Link to="/register" className="text-sm text-rehabilitation-button hover:underline">
-            Sign up
-          </Link>
-        </div>
       </form>
+      
+      <div className="mt-8 text-center text-sm text-muted-foreground">
+        <p>Access is restricted to authorized personnel only.</p>
+        <p>Contact system administrator for account creation.</p>
+      </div>
     </div>
   );
 };
